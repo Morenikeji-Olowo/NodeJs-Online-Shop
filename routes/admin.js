@@ -1,16 +1,18 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import productsController from "../controllers/products.js";
-
+import adminController from "../controllers/admin.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const adminRouter = express.Router();
 
+// /admin/add-product => GET
+adminRouter.get("/add-product", adminController.getAddProduct);
 
-adminRouter.get("/add-product", productsController.getAddProduct);
+// /admin/add-product => POST
+adminRouter.post("/add-product", adminController.postAddProduct);
 
-adminRouter.post("/add-product", productsController.postAddProduct);
-
+// /admin/products => GET
+adminRouter.get("/products", adminController.getProducts);
 export  { adminRouter};
