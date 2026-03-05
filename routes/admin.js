@@ -15,4 +15,6 @@ adminRouter.post("/add-product", adminController.postAddProduct);
 
 // /admin/products => GET
 adminRouter.get("/products", adminController.getProducts);
+
+adminRouter.get("/edit-product/:productId", adminController.getEditProduct);
 export  { adminRouter};

@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 
 const products = [];
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export const __dirname = path.dirname(__filename);
 const p = path.join(__dirname, "..", "data", "products.json");
 
 const getProductsFromFile = (cb) =>{
@@ -34,6 +34,12 @@ class Product {
   }
   static fetchAll(cb) {
     getProductsFromFile(cb);
+  }
+  static findById(id, cb){
+    getProductsFromFile((products) =>{
+      const product = products.find(p => p.id == id);
+      cb(product);
+    })
   }
 }
 

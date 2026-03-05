@@ -1,9 +1,17 @@
 import Product from "../model/product.js";
 
 const getAddProduct = (req, res, next) => {
-  res.render("admin/add-product", {
+  res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
+  });
+};
+
+const getEditProduct = (req, res, next) => {
+  res.render("admin/edit-product", {
+    pageTitle: "Add Product",
+    path: "/admin/add-product",
+    editing: true
   });
 };
 
@@ -27,7 +35,8 @@ const getProducts = (req, res, next) => {
 const adminController = {
     getAddProduct,
     postAddProduct,
-    getProducts
+    getProducts,
+    getEditProduct
 }
 
 export default adminController;
