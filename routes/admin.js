@@ -1,9 +1,5 @@
 import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
 import adminController from "../controllers/admin.js";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const adminRouter = express.Router();
 
@@ -17,4 +13,6 @@ adminRouter.post("/add-product", adminController.postAddProduct);
 adminRouter.get("/products", adminController.getProducts);
 
 adminRouter.get("/edit-product/:productId", adminController.getEditProduct);
+adminRouter.post("/edit-product", adminController.postEditProduct);
+adminRouter.post("/delete-product", adminController.deleteProduct);
 export  { adminRouter};
