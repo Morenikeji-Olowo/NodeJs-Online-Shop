@@ -11,5 +11,6 @@ shopRouter.post("/cart", shopController.postCart)
 shopRouter.get("/orders", shopController.getOrders)
 shopRouter.get("/checkout", shopController.getCheckout)
 shopRouter.post("/cart-delete-item", shopController.postCartDeleteProduct)
+shopRouter.post("/create-order", shopController.postOrder)
 
 export default shopRouter;

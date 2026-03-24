@@ -14,5 +14,5 @@ adminRouter.get("/products", adminController.getProducts);
 
 adminRouter.get("/edit-product/:productId", adminController.getEditProduct);
 adminRouter.post("/edit-product", adminController.postEditProduct);
-adminRouter.post("/delete-product", adminController.deleteProduct);
+adminRouter.post("/delete-product", adminController.postDeleteProduct);
 export  { adminRouter};
