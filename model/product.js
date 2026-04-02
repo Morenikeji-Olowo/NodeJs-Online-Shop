@@ -1,86 +1,108 @@
-import database from "../util/database.js";
-import mongodb from "mongodb";
-class Product {
-  constructor(price, imageUrl, title, description, id, userId) {
-    this.title = title;
-    this.price = price;
-    this.imageUrl = imageUrl;
-    this.description = description;
-    this._id = id ? new mongodb.ObjectId(id) : null;
-    this.userId = userId;
+import mongoose from "mongoose";
 
+const productSchema = new mongoose.Schema({
+  title:{
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  imageUrl:{
+    type: String,
+    required: true  
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   }
-  save() {
-    const db = database.getDb();
-    let dbOp;
+}); 
 
-    if (this._id) {
-      dbOp = db.collection("products").updateOne(
-        {
-          _id:this._id,
-        },
-        {
-          $set: this,
-        },
-      );
-    } else {
-      dbOp = db.collection("products").insertOne(this);
-    }
-    return db
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+export default mongoose.model('Product', productSchema);
+// import database from "../util/database.js";
+// import mongodb from "mongodb";
+// class Product {
+//   constructor(price, imageUrl, title, description, id, userId) {
+//     this.title = title;
+//     this.price = price;
+//     this.imageUrl = imageUrl;
+//     this.description = description;
+//     this._id = id ? new mongodb.ObjectId(id) : null;
+//     this.userId = userId;
 
-  static fetchAll() {
-    const db = database.getDb();
-    return db.collection(
-      "products"
-        .find()
-        .toArray()
-        .then((products) => {
-          console.log(products);
-          return products;
-        })
-        .catch((error) => {
-          console.log(error);
-        }),
-    );
-  }
+//   }
+// save() {
+//   const db = database.getDb();
+//   let dbOp;
 
-  static findById(prodId) {
-    const db = database.getDb();
-    return db
-      .collection("products")
-      .find({
-        _id: new mongodb.ObjectId(prodId),
-      })
-      .next()
-      .then((product) => {
-        console.log(product);
-        return product;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+//   if (this._id) {
+//     dbOp = db.collection("products").updateOne(
+//       { _id: this._id },
+//       { $set: this }
+//     );
+//   } else {
+//     dbOp = db.collection("products").insertOne(this);
+//   }
 
-  static deleteById(prodId){
-    const db = database.getDb();
-    return db.collection("products").deleteOne({
-      _id: new mongodb.ObjectId(prodId)
-    })
-    .then((result)=>{
-      console.log("deleted");
+//   return dbOp
+//     .then((result) => {
+//       console.log(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// }
+
+//   static fetchAll() {
+//     const db = database.getDb();
+//     return db.collection("products")
+//         .find()
+//         .toArray()
+//         .then((products) => {
+//           console.log(products);
+//           return products;
+//         })
+//         .catch((error) => {
+//           console.log(error);
+//         });
+//       }
+
+//   static findById(prodId) {
+//     const db = database.getDb();
+//     return db
+//       .collection("products")
+//       .find({
+//         _id: new mongodb.ObjectId(prodId),
+//       })
+//       .next()
+//       .then((product) => {
+//         console.log(product);
+//         return product;
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   }
+
+//   static deleteById(prodId){
+//     const db = database.getDb();
+//     return db.collection("products").deleteOne({
+//       _id: new mongodb.ObjectId(prodId)
+//     })
+//     .then((result)=>{
+//       console.log("deleted");
       
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-  }
-}
+//     })
+//     .catch((err)=>{
+//       console.log(err);
+//     })
+//   }
+// }
 
-export default Product;
+// export default Product;

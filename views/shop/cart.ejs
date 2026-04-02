@@ -11,9 +11,9 @@
                         <img src="<%= p.imageUrl %>" alt="<%= p.title %>">
                         <h2><%= p.title %></h2>
                         <p class="cart-item__price">$<%= p.price %></p>
-                        <p class="cart-item__quantity">Quantity: <%= p["cart-item"].quantity%></p>
+                        <p class="cart-item__quantity">Quantity: <%= p.quantity%></p>
                                                     <form  action="/cart-delete-item" method="POST">
-                                <input type="hidden" name="productId" value="<%= p.id %>">
+                                <input type="hidden" name="productId" value="<%= p._id %>">
                                 <button type="submit">Remove</button>
                             </form>
                         </li>

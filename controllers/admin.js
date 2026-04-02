@@ -1,6 +1,4 @@
-import { where } from "sequelize";
-import Product from "../model/product.js";
-
+import Product from "../model/Product.js";
 const getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
@@ -34,13 +32,18 @@ const getEditProduct = (req, res, next) => {
 };
 
 const postAddProduct = async (req, res, next) => {
-  const prodId = req.body.productId;
+  // const prodId = req.body.productId;
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-
-  const product = new Product(price, imageUrl, title, description, null, req.user._id);
+  const product = new Product({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+    userId: req.user,
+  });
   product
     .save()
     .then((result) => {
@@ -58,14 +61,14 @@ const postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDescription = req.body.description;
   const updatedPrice = req.body.price;
-
-  const product = new Product(
-    updatedPrice,
-    updatedImageUrl,
-    updatedTitle,
-    updatedDescription,
-  )
-
+  Product.findById(productId)
+    .then((product) => {
+      product.title = updatedTitle;
+      product.imageUrl = updatedImageUrl;
+      product.description = updatedDescription;
+      product.price = updatedPrice;
+      product.save();
+    })
     .then((result) => {
       console.log("Product updated successfully");
       res.redirect("/admin/products");
@@ -76,7 +79,9 @@ const postEditProduct = (req, res, next) => {
 };
 
 const getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
+  // .select("title price -_id")
+  // .populate("userId", "name")
     .then((products) => {
       res.render("admin/products", {
         products: products,
@@ -92,7 +97,7 @@ const getProducts = (req, res, next) => {
 
 const postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
-  Product.deleteById(productId)
+  Product.findByIdAndDelete(productId)
     .then(() => {
       console.log("Deleted");
       res.redirect("/admin/products");
@@ -101,7 +106,6 @@ const postDeleteProduct = (req, res, next) => {
       console.log(err);
     });
 };
-
 
 const adminController = {
   getAddProduct,

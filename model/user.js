@@ -1,47 +1,52 @@
-import database from "../util/database.js";
-import mongodb, { ObjectId } from "mongodb";
+import mongoose from "mongoose";
 
-class User{
-    constructor(name, email, cart, id){
-        this.name = name;
-        this.email = email;
-        this.cart = cart;
-        this.id = id;
-    }
-    save(){
-        const db = database.getDb();
-        return db.collection("users").insertOne(this)
-    }
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  cart: {
+    items: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
+});
 
-    addToCart(product){
-        // const cartProdcut = this.cart.items.findIndex((cp)=>{
-        //     return cp._id === product._id;
-        // })
-        const updatedCart = {
-            items: [{...product, quantity:1}],
-        }
-        const db = database.getDb();
-        return db.collection("users").updateOne(
-            { _id: new ObjectId(this._id)},
-            {$set: {cart: updatedCart}}
-        )
+userSchema.methods.addToCart = function(product){
+  const cartProductIndex = this.cart.items.findIndex(cp => {
+    return cp.productId.toString() === product._id.toString();
+  });
+  let newQuantity = 1;
+  const updatedCartItems = [...this.cart.items];
+  if(cartProductIndex >= 0){
+    newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+    updatedCartItems[cartProductIndex].quantity = newQuantity;
+  }
+  else{
+    updatedCartItems.push({
+      productId: product._id,
+      quantity: newQuantity
+    });
+  }
+  const updatedCart = {
+    items: updatedCartItems
+  };
+  this.cart = updatedCart;
+  return this.save();
+};
 
-    }
-    static findById(id){
-        const db = database.getDb();
-        return db.collection("users").find({
-            _id: new ObjectId(id)
-        })
-        .then((user)=>{
-            console.log(user);
-            return user;
-        })
-        .catch((err)=>{
-            console.log(err);
-            
-        })
-    }
-
- }
-
- export default User
+export default mongoose.model("User", userSchema);

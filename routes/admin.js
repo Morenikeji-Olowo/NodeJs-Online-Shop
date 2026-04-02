@@ -3,10 +3,10 @@ import adminController from "../controllers/admin.js";
 
 const adminRouter = express.Router();
 
-// /admin/add-product => GET
+// // /admin/add-product => GET
 adminRouter.get("/add-product", adminController.getAddProduct);
 
-// /admin/add-product => POST
+// // /admin/add-product => POST
 adminRouter.post("/add-product", adminController.postAddProduct);
 
 // /admin/products => GET
