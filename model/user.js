@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name: {
+  // name: {
+  //   type: String,
+  //   required: true,
+  // },
+  email: {
     type: String,
     required: true,
   },
-  email: {
+  password:{
     type: String,
     required: true,
   },
@@ -48,5 +52,21 @@ userSchema.methods.addToCart = function(product){
   this.cart = updatedCart;
   return this.save();
 };
+
+userSchema.methods.deleteCartItem = function(productId){
+  const updatedCartItems = this.cart.items.filter(item => {
+    return item.productId.toString() !== productId.toString();
+  });
+  this.cart.items = updatedCartItems;
+  return this.save();
+
+}
+
+userSchema.methods.clearCart = function(){
+  this.cart = {
+    items: []
+  }
+  return this.save();
+}
 
 export default mongoose.model("User", userSchema);

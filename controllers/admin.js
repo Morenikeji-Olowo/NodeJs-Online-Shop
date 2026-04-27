@@ -4,6 +4,7 @@ const getAddProduct = (req, res, next) => {
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
+    isAuthenticated: req.session.isLoggedIn,
   });
 };
 
@@ -24,6 +25,7 @@ const getEditProduct = (req, res, next) => {
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -80,14 +82,15 @@ const postEditProduct = (req, res, next) => {
 
 const getProducts = (req, res, next) => {
   Product.find()
-  // .select("title price -_id")
-  // .populate("userId", "name")
+    // .select("title price -_id")
+    // .populate("userId", "name")
     .then((products) => {
       res.render("admin/products", {
         products: products,
         pageTitle: "Admin Products",
         path: "/admin/products",
         hasProducts: products.length > 0,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {

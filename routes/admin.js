@@ -1,7 +1,9 @@
 import express from "express";
 import adminController from "../controllers/admin.js";
+import { isAuth } from "../middleware/isAuth.js";
 
 const adminRouter = express.Router();
+adminRouter.use(isAuth);
 
 // // /admin/add-product => GET
 adminRouter.get("/add-product", adminController.getAddProduct);
